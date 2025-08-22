@@ -4,6 +4,7 @@
  */
 import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
+import { API_BASE_URL } from "../config/api";
 
 export const useUserManagement = () => {
   // State management for user data
@@ -23,7 +24,7 @@ export const useUserManagement = () => {
   const fetchUsers = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await axios.get("/api/users");
+      const response = await axios.get(`${API_BASE_URL}/api/users`);
       setUsers(response.data.users || []);
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -39,7 +40,7 @@ export const useUserManagement = () => {
    */
   const fetchLeaderboard = useCallback(async () => {
     try {
-      const response = await axios.get("/api/leaderboard");
+      const response = await axios.get(`${API_BASE_URL}/api/leaderboard`);
       setLeaderboard(response.data.leaderboard || []);
     } catch (error) {
       console.error("Error fetching leaderboard:", error);
@@ -61,7 +62,7 @@ export const useUserManagement = () => {
 
       setLoading(true);
       try {
-        const response = await axios.post("/api/users", {
+        const response = await axios.post(`${API_BASE_URL}/api/users`, {
           name: userName.trim(),
         });
         setMessage(`Welcome ${userName}! ${response.data.message}`);
@@ -90,7 +91,7 @@ export const useUserManagement = () => {
     async (userId) => {
       setLoading(true);
       try {
-        const response = await axios.post(`/api/users/${userId}/claim`);
+        const response = await axios.post(`${API_BASE_URL}/api/users/${userId}/claim`);
         setMessage(
           `🎉 ${response.data.message} Points awarded: ${response.data.pointsAwarded}`
         );
