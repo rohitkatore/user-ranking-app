@@ -19,10 +19,13 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://localhost:5000",
+        target: "http://localhost:5000", // Only for local development
         changeOrigin: true,
         secure: false,
       },
     },
   },
+  define: {
+    'process.env.NODE_ENV': '"production"'
+  }
 });

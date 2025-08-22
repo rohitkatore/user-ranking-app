@@ -1,11 +1,11 @@
 // API Configuration for different environments
 const getApiBaseUrl = () => {
-  // Check if we're in production (deployed on Vercel)
+  // Check if we're in production (deployed)
   if (import.meta.env.PROD) {
-    // Your backend Vercel URL
+    // Your actual backend Vercel URL
     return 'https://user-ranking-app.vercel.app';
   }
-  // Development environment - use empty string to use proxy
+  // Development environment - use empty string for proxy
   return '';
 };
 
