@@ -5,16 +5,16 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   build: {
-    outDir: 'dist',
+    outDir: "dist",
     sourcemap: false,
     rollupOptions: {
       output: {
         manualChunks: {
-          vendor: ['react', 'react-dom'],
-          utils: ['axios']
-        }
-      }
-    }
+          vendor: ["react", "react-dom"],
+          utils: ["axios"],
+        },
+      },
+    },
   },
   server: {
     proxy: {
@@ -26,6 +26,6 @@ export default defineConfig({
     },
   },
   define: {
-    'process.env.NODE_ENV': '"production"'
-  }
+    "process.env.NODE_ENV": '"production"',
+  },
 });

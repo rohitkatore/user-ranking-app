@@ -40,6 +40,7 @@ function App() {
     claimPoints,
     clearMessage,
     goToPage,
+    isUserClaiming,
   } = useUserManagement();
 
   /**
@@ -193,7 +194,7 @@ function App() {
                   key={user._id}
                   user={user}
                   onClaimPoints={handleClaimPoints}
-                  loading={loading}
+                  loading={isUserClaiming(user._id)}
                 />
               ))}
             </div>

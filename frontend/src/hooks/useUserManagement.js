@@ -11,6 +11,7 @@ export const useUserManagement = () => {
   const [users, setUsers] = useState([]);
   const [leaderboard, setLeaderboard] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [claimingUsers, setClaimingUsers] = useState(new Set()); // Track which users are claiming
   const [message, setMessage] = useState("");
 
   // Pagination state
@@ -89,9 +90,13 @@ export const useUserManagement = () => {
    */
   const claimPoints = useCallback(
     async (userId) => {
-      setLoading(true);
+      // Add user to claiming set
+      setClaimingUsers(prev => new Set([...prev, userId]));
+      
       try {
-        const response = await axios.post(`${API_BASE_URL}/api/users/${userId}/claim`);
+        const response = await axios.post(
+          `${API_BASE_URL}/api/users/${userId}/claim`
+        );
         setMessage(
           `🎉 ${response.data.message} Points awarded: ${response.data.pointsAwarded}`
         );
@@ -105,7 +110,12 @@ export const useUserManagement = () => {
         setMessage(errorMessage);
         return false;
       } finally {
-        setLoading(false);
+        // Remove user from claiming set
+        setClaimingUsers(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(userId);
+          return newSet;
+        });
       }
     },
     [fetchUsers, fetchLeaderboard]
@@ -117,6 +127,15 @@ export const useUserManagement = () => {
   const clearMessage = useCallback(() => {
     setMessage("");
   }, []);
+
+  /**
+   * Check if a specific user is currently claiming points
+   * @param {string} userId - The ID of the user to check
+   * @returns {boolean} - Whether the user is claiming
+   */
+  const isUserClaiming = useCallback((userId) => {
+    return claimingUsers.has(userId);
+  }, [claimingUsers]);
 
   /**
    * Calculate pagination data
@@ -201,5 +220,8 @@ export const useUserManagement = () => {
     claimPoints,
     clearMessage,
     refreshData: () => Promise.all([fetchUsers(), fetchLeaderboard()]),
+    
+    // Helper functions
+    isUserClaiming,
   };
 };
